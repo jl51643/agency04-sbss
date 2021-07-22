@@ -2,11 +2,25 @@ package com.agency04.sbss.pizza.service.impl;
 
 import com.agency04.sbss.pizza.model.Pizza;
 import com.agency04.sbss.pizza.service.PizzeriaService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+/**
+ * Concrete pizzeria
+ */
+@Component
 public class SecondPizzeria implements PizzeriaService {
 
+	/**
+	 * Name of pizzeria
+	 */
+	@Value("${secondPizzeria.name}")
 	private String name;
 
+	/**
+	 * Address of pizzeria
+	 */
+	@Value("${secondPizzeria.address}")
 	private String address;
 
 	@Override
