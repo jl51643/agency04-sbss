@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+       <context:property-placeholder location="application.properties"/>
+
+       <bean id="firstPizzeria"
+             class="com.agency04.sbss.pizza.service.impl.FirstPizzeria">
+           
+           <property name="name" value="My first pizzeria" />
+           <property name="address" value="Sesame street"/>
+       </bean>
+
+        <bean id="secondPizzeria"
+            class="com.agency04.sbss.pizza.service.impl.SecondPizzeria">
+            <property name="name" value="${secondPizzeria.name}" />
+            <property name="address" value="${secondPizzeria.address}"/>
+        </bean>
+
+        <bean id="pizzaDeliveryConstructorInjection"
+              class="com.agency04.sbss.pizza.service.impl.PizzaDeliveryServiceConstructorInjection">
+            <constructor-arg ref="firstPizzeria"/>
+
+        </bean>
+
+    <bean id="pizzaDeliverySetterInjection"
+          class="com.agency04.sbss.pizza.service.impl.PizzaDeliveryServiceSetterInjection">
+
+        <property name="pizzeriaService" ref="secondPizzeria"/>
+    </bean>
+</beans>
