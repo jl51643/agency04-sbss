@@ -15,15 +15,16 @@ public interface PizzeriaService {
 	String getName();
 
 	/**
-	 * Returns address of pizeria
+	 * Returns address of pizzeria
 	 *
 	 * @return Returns address of pizzeria
 	 */
 	String getAddress();
 
 	/**
+	 * Returns description of pizzeria
 	 *
 	 * @param pizza Pizza to make
 	 */
-	void makePizza(Pizza pizza);
+	String makePizza(Pizza pizza);
 }

@@ -9,19 +9,19 @@ import org.springframework.stereotype.Component;
  * Concrete pizzeria
  */
 @Component
-public class FirstPizzeria implements PizzeriaService {
+public class SecondPizzeriaService implements PizzeriaService {
 
 	/**
 	 * Name of pizzeria
 	 */
-	@Value("${firstPizzeria.name}")
-	private  String name;
+	@Value("${secondPizzeria.name}")
+	private String name;
 
 	/**
 	 * Address of pizzeria
 	 */
-	@Value("${firstPizzeria.address}")
-	private  String address;
+	@Value("${secondPizzeria.address}")
+	private String address;
 
 	@Override
 	public String getName() {
@@ -34,8 +34,8 @@ public class FirstPizzeria implements PizzeriaService {
 	}
 
 	@Override
-	public void makePizza(Pizza pizza) {
-
+	public String makePizza(Pizza pizza) {
+		return "Pizzeria: " + getName() + "\nAddress: " + getAddress();
 	}
 
 	public void setName(String name) {

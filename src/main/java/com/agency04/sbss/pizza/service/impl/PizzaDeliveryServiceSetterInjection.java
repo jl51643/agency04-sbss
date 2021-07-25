@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -22,8 +21,10 @@ public class PizzaDeliveryServiceSetterInjection implements PizzaDeliveryService
 	 */
 	private PizzeriaService pizzeriaService;
 
-	public PizzaDeliveryServiceSetterInjection() {
-
+	@Autowired
+	@Qualifier("secondPizzeriaService")
+	public void setPizzeriaService(PizzeriaService pizzeriaService) {
+		this.pizzeriaService = pizzeriaService;
 	}
 
 	@Override
@@ -34,17 +35,11 @@ public class PizzaDeliveryServiceSetterInjection implements PizzaDeliveryService
 				+ "You ordered " + pizza.getName() + " pizza with ingredients "
 				+ pizza.getIngredients()
 				.stream()
-				.map(PizzaIngredient::getName)
+				.map(PizzaIngredient::getPizzaIngredient)
 				.collect(Collectors
 						.joining(", "))
 				+ ".";
 
 		return order;
-	}
-
-	@Autowired
-	@Qualifier("secondPizzeria")
-	public void setPizzeriaService(PizzeriaService pizzeriaService) {
-		this.pizzeriaService = pizzeriaService;
 	}
 }

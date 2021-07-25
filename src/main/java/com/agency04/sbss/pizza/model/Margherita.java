@@ -1,7 +1,5 @@
 package com.agency04.sbss.pizza.model;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -9,18 +7,26 @@ import java.util.Set;
  */
 public class Margherita implements Pizza {
 
+    /**
+     * Pizza name
+     */
+    private final String name = "Margherita";
+
+    /**
+     * Set of ingredients that this pizza contains
+     */
+    private final Set<PizzaIngredient> ingredients =
+            Set.of(PizzaIngredient.TOMATO_SAUCE,
+                    PizzaIngredient.MOZZARELLA,
+                    PizzaIngredient.OREGANO);
+
     @Override
     public String getName() {
-        return "Margherita";
+        return this.name;
     }
 
     @Override
     public Set<PizzaIngredient> getIngredients() {
-        Set<PizzaIngredient> ingredients = new HashSet<>();
-        ingredients.add(PizzaIngredient.TOMATO_SAUCE);
-        ingredients.add(PizzaIngredient.MOZZARELLA);
-        ingredients.add(PizzaIngredient.OREGANO);
-
-        return ingredients;
+        return this.ingredients;
     }
 }

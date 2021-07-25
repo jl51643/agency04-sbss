@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -22,24 +23,20 @@ public class PizzaDeliveryServiceConstructorInjection implements PizzaDeliverySe
 	private PizzeriaService pizzeriaService;
 
 	@Autowired
-	public PizzaDeliveryServiceConstructorInjection(@Qualifier("firstPizzeria") PizzeriaService pizzeriaService) {
+	public PizzaDeliveryServiceConstructorInjection(@Qualifier("firstPizzeriaService") PizzeriaService pizzeriaService) {
 		this.pizzeriaService = pizzeriaService;
 	}
 
 	@Override
 	public String orderPizza(Pizza pizza) {
-		String order = "";
-
-		order += pizzeriaService.getName() + " Pizzeria: "
+		return pizzeriaService.getName() + " Pizzeria: "
 				+ "You ordered " + pizza.getName() + " pizza with ingredients "
 				+ pizza.getIngredients()
 				.stream()
-				.map(PizzaIngredient::getName)
+				.map(PizzaIngredient::getPizzaIngredient)
 				.collect(Collectors
 						.joining(", "))
 				+ ".";
-
-		return order;
 	}
 
 }

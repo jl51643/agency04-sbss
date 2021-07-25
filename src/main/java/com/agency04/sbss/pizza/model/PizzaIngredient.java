@@ -25,9 +25,9 @@ public enum PizzaIngredient {
     OLIVES("olives");
 
     /**
-     * name of ingredient
+     * Name of ingredient
      */
-    public final String name;
+    private final String pizzaIngredient;
 
     /**
      * Constructs pizza ingredient with given name
@@ -35,13 +35,13 @@ public enum PizzaIngredient {
      * @param name name of ingredient
      */
     PizzaIngredient(String name) {
-        this.name = name;
+        this.pizzaIngredient = name;
     }
 
     /**
      * @return Returns name of ingredient
      */
-    public String getName() {
-        return name;
+    public String getPizzaIngredient() {
+        return pizzaIngredient;
     }
 }

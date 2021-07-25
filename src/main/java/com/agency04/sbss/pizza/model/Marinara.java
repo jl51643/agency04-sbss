@@ -1,6 +1,6 @@
 package com.agency04.sbss.pizza.model;
 
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Set;
 
 /**
@@ -8,18 +8,26 @@ import java.util.Set;
  */
 public class Marinara implements Pizza {
 
+	/**
+	 * Pizza name
+	 */
+	private final String name = "Marinara";
+
+	/**
+	 * Set of ingredients that this pizza contains
+	 */
+	private final Set<PizzaIngredient> ingredients =
+			Set.of(PizzaIngredient.TOMATO_SAUCE,
+					PizzaIngredient.GARLIC,
+					PizzaIngredient.BASIL);
+
 	@Override
 	public String getName() {
-		return "Marinara";
+		return this.name;
 	}
 
 	@Override
 	public Set<PizzaIngredient> getIngredients() {
-		Set<PizzaIngredient> ingredients = new HashSet<>();
-		ingredients.add(PizzaIngredient.TOMATO_SAUCE);
-		ingredients.add(PizzaIngredient.GARLIC);
-		ingredients.add(PizzaIngredient.BASIL);
-
-		return ingredients;
+		return this.ingredients;
 	}
 }
