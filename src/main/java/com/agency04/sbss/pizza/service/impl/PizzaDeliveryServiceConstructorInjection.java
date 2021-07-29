@@ -6,6 +6,7 @@ import com.agency04.sbss.pizza.service.PizzaDeliveryService;
 import com.agency04.sbss.pizza.service.PizzeriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
  * Concrete pizza delivery service
  */
 @Component
+@Scope("singleton")
 public class PizzaDeliveryServiceConstructorInjection implements PizzaDeliveryService {
 
 	/**
