@@ -12,8 +12,6 @@ import javax.annotation.PreDestroy;
 /**
  * Concrete pizzeria
  */
-@Component
-@Scope("singleton")
 public class FirstPizzeriaService implements PizzeriaService {
 
 	/**

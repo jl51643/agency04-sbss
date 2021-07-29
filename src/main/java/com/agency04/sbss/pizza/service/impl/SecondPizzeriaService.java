@@ -3,8 +3,10 @@ package com.agency04.sbss.pizza.service.impl;
 import com.agency04.sbss.pizza.model.Pizza;
 import com.agency04.sbss.pizza.service.PizzeriaService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -12,8 +14,8 @@ import javax.annotation.PreDestroy;
 /**
  * Concrete pizzeria
  */
-@Component
-@Scope("prototype")
+@Service
+@Primary
 public class SecondPizzeriaService implements PizzeriaService {
 
 	/**

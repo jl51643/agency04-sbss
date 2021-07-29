@@ -15,8 +15,6 @@ import java.util.stream.Collectors;
 /**
  * Concrete pizza delivery service
  */
-@Component
-@Scope("singleton")
 public class PizzaDeliveryServiceConstructorInjection implements PizzaDeliveryService {
 
 	/**
@@ -24,8 +22,7 @@ public class PizzaDeliveryServiceConstructorInjection implements PizzaDeliverySe
 	 */
 	private PizzeriaService pizzeriaService;
 
-	@Autowired
-	public PizzaDeliveryServiceConstructorInjection(@Qualifier("firstPizzeriaService") PizzeriaService pizzeriaService) {
+	public PizzaDeliveryServiceConstructorInjection(PizzeriaService pizzeriaService) {
 		this.pizzeriaService = pizzeriaService;
 	}
 
