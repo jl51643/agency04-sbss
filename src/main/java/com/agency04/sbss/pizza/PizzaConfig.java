@@ -35,6 +35,7 @@ public class PizzaConfig {
 	 * @return Returns concrete <code>PizzaDeliveryService</code>
 	 */
 	@Bean
+	@Primary
 	public PizzaDeliveryService pizzaDeliveryServiceConstructorInjection() {
 
 		return new PizzaDeliveryServiceConstructorInjection(firstPizzeriaService());
