@@ -6,14 +6,17 @@ import com.agency04.sbss.pizza.service.PizzaDeliveryService;
 import com.agency04.sbss.pizza.service.PizzeriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
 /**
  * Concrete pizza delivery service
  */
-@Component
+@Service
 public class PizzaDeliveryServiceSetterInjection implements PizzaDeliveryService {
 
 	/**
@@ -22,7 +25,6 @@ public class PizzaDeliveryServiceSetterInjection implements PizzaDeliveryService
 	private PizzeriaService pizzeriaService;
 
 	@Autowired
-	@Qualifier("secondPizzeriaService")
 	public void setPizzeriaService(PizzeriaService pizzeriaService) {
 		this.pizzeriaService = pizzeriaService;
 	}
