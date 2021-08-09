@@ -2,11 +2,10 @@ package com.agency04.sbss.pizza.service;
 
 import com.agency04.sbss.pizza.model.PizzaOrder;
 import com.agency04.sbss.pizza.rest.dto.request.DeliveryOrderForm;
-import com.agency04.sbss.pizza.rest.dto.response.PizzeriaMenu;
 import com.agency04.sbss.pizza.rest.dto.response.PizzeriaInfo;
+import com.agency04.sbss.pizza.rest.dto.response.PizzeriaMenu;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Service used to order pizza
@@ -19,7 +18,7 @@ public interface PizzaDeliveryService {
 	 * @param order customer's order
 	 * @return Returns description of order
 	 */
-	Optional<String> orderPizza(DeliveryOrderForm order);
+	String orderPizza(DeliveryOrderForm order);
 
 	/**
 	 * Returns information about pizzeria

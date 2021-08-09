@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Rest controller that handles requests about pizzeria info
  */
 @RestController
-@RequestMapping("/api/pizzeria")
+@RequestMapping("/pizzeria")
 public class PizzeriaRestController {
 
 	/**

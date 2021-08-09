@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
  * Rest controller for customer related request
  */
 @RestController
-@RequestMapping("/api/customer")
+@RequestMapping("/customer")
 public class CustomerRestController {
 
 	/**

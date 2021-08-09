@@ -1,31 +1,29 @@
 package com.agency04.sbss.pizza.rest.controller;
 
-import com.agency04.sbss.pizza.model.Customer;
 import com.agency04.sbss.pizza.model.PizzaOrder;
 import com.agency04.sbss.pizza.rest.dto.request.DeliveryOrderForm;
 import com.agency04.sbss.pizza.service.PizzaDeliveryService;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Rest controller that handles requests related to pizza deliveries
  */
 @RestController
-@RequestMapping("/api/delivery")
+@RequestMapping("/delivery")
 public class DeliveryRestController {
 
 	/**
 	 * Pizza delivery service for processing pizza orders
 	 */
-	private PizzaDeliveryService pizzaDeliveryService;
+	private final PizzaDeliveryService pizzaDeliveryService;
 
 	public DeliveryRestController(PizzaDeliveryService pizzaDeliveryService) {
 		this.pizzaDeliveryService = pizzaDeliveryService;
+
 	}
 
 	/**
@@ -38,11 +36,7 @@ public class DeliveryRestController {
 	 */
 	@PostMapping("/order")
 	public ResponseEntity<?> order(@RequestBody DeliveryOrderForm deliveryOrderForm) {
-		Optional<String> response = pizzaDeliveryService.orderPizza(deliveryOrderForm);
-		if (response.isEmpty())
-			return new ResponseEntity<>("Check your order", HttpStatus.BAD_REQUEST);
-		else
-			return ResponseEntity.ok().body(response.get());
+		return ResponseEntity.ok().body(pizzaDeliveryService.orderPizza(deliveryOrderForm));
 	}
 
 	/**
@@ -54,4 +48,5 @@ public class DeliveryRestController {
 	public ResponseEntity<List<PizzaOrder>> listCurrentOrders () {
 		return new ResponseEntity<>(pizzaDeliveryService.getCurrentOrders(), HttpStatus.OK);
 	}
+
 }

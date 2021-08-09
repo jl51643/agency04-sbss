@@ -1,4 +1,4 @@
-package com.agency04.sbss.pizza.service.impl.util;
+package com.agency04.sbss.pizza.service.impl.util.factory;
 
 import com.agency04.sbss.pizza.model.Pizza;
 

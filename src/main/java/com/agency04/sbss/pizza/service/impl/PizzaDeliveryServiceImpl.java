@@ -1,5 +1,6 @@
 package com.agency04.sbss.pizza.service.impl;
 
+import com.agency04.sbss.pizza.model.Customer;
 import com.agency04.sbss.pizza.model.Pizza;
 import com.agency04.sbss.pizza.model.PizzaIngredient;
 import com.agency04.sbss.pizza.model.PizzaOrder;
@@ -9,12 +10,12 @@ import com.agency04.sbss.pizza.rest.dto.response.PizzeriaMenu;
 import com.agency04.sbss.pizza.rest.exceptionHandler.NoSuchPizzaException;
 import com.agency04.sbss.pizza.service.PizzaDeliveryService;
 import com.agency04.sbss.pizza.service.PizzeriaService;
-import com.agency04.sbss.pizza.service.impl.util.PizzaFactory;
+import com.agency04.sbss.pizza.service.impl.util.factory.PizzaFactory;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -28,46 +29,41 @@ public class PizzaDeliveryServiceImpl implements PizzaDeliveryService {
 	 */
 	private final PizzeriaService pizzeriaService;
 
+	private final ConversionService conversionService;
+
 	/**
 	 * Current orders
 	 */
 	private List<PizzaOrder> currentOrders;
 
-	public PizzaDeliveryServiceImpl(PizzeriaService pizzeriaService) {
+	public PizzaDeliveryServiceImpl(PizzeriaService pizzeriaService, ConversionService conversionService) {
 		this.pizzeriaService = pizzeriaService;
+		this.conversionService = conversionService;
 	}
 
 	@Override
-	public Optional<String> orderPizza(DeliveryOrderForm order) {
+	public String orderPizza(DeliveryOrderForm order) {
 
-		if (order == null
-				|| order.getCustomer() == null
-				|| order.getCustomer().getUsername() == null
-				|| order.getCustomer().getAddress() == null
-				|| order.getCustomer().getPhone() == null
-				|| order.getPizzaOrders() == null
-				|| order.getPizzaOrders().size() == 0)
-			return Optional.empty();
+		Customer customer = conversionService.convert(order, Customer.class);
 
 		String orders = pizzeriaService.getName() + " Pizzeria: \nYou ordered: \n";
 
-		for (PizzaOrder pizzaOrder : order.getPizzaOrders()) {
+		List<PizzaOrder> pizzaOrderList = conversionService.convert(order, List.class);
+
+
+		for (PizzaOrder pizzaOrder : pizzaOrderList) {
 			Pizza pizza;
 			try {
 				pizza = PizzaFactory.newInstance(pizzaOrder.getPizzaName());
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException e) {
-				return Optional.empty();
+				throw new NoSuchPizzaException("There is no " + pizzaOrder.getPizzaName() + " pizza.");
 			}
 
 			if (!this.pizzeriaService.getMenu().getMenu().containsKey(pizza))
 				throw new NoSuchPizzaException("Pizzeria do not serve " + pizza.getName() + " pizza.");
 
-			if (pizzaOrder.getSize() == null
-					|| !this.pizzeriaService.getMenu().getMenu().get(pizza).contains(pizzaOrder.getSize()))
+			if (!this.pizzeriaService.getMenu().getMenu().get(pizza).contains(pizzaOrder.getSize()))
 				throw new NoSuchPizzaException("Pizzeria do not serve " + pizza.getName() + " pizza size " + pizzaOrder.getSize() + ".");
-
-			if (pizzaOrder.getQuantity() < 1)
-				return Optional.empty();
 
 			orders += pizzaOrder.getQuantity() + " " +pizzaOrder.getSize() + " "
 					+ pizza.getName() + " pizza with ingredients "
@@ -81,7 +77,7 @@ public class PizzaDeliveryServiceImpl implements PizzaDeliveryService {
 
 		this.setCurrentOrders(order.getPizzaOrders());
 
-		return Optional.of(orders);
+		return orders;
 	}
 
 	@Override
