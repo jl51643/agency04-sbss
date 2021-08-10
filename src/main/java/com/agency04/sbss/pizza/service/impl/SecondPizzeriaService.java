@@ -1,21 +1,19 @@
 package com.agency04.sbss.pizza.service.impl;
 
+import com.agency04.sbss.pizza.model.Capriccosa;
+import com.agency04.sbss.pizza.model.Margherita;
 import com.agency04.sbss.pizza.model.Pizza;
+import com.agency04.sbss.pizza.rest.dto.response.PizzeriaMenu;
 import com.agency04.sbss.pizza.service.PizzeriaService;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import java.util.Set;
 
 /**
  * Concrete pizzeria
  */
 @Service
-@Primary
 public class SecondPizzeriaService implements PizzeriaService {
 
 	/**
@@ -29,21 +27,21 @@ public class SecondPizzeriaService implements PizzeriaService {
 	private String address;
 
 	/**
+	 * Pizzeria menu
+	 */
+	private PizzeriaMenu menu;
+
+	/**
 	 * Initializing values after construction of object
 	 */
 	@PostConstruct
 	private void initializeValues() {
 		this.setName("My second pizzeria");
 		this.setAddress("Wall street");
-		System.out.println(this.getName() + ": Executing post construct operations...");
-	}
 
-	/**
-	 * Because of "prototype" scope function will not be called
-	 */
-	@PreDestroy
-	private void preDestroy() {
-		System.out.println(this.getName() + ": Executing pre destroy operations...");
+		this.menu = new PizzeriaMenu();
+		this.menu.addMenuItem(new Margherita(), Set.of("Small", "Large", "Jumbo"));
+		this.menu.addMenuItem(new Capriccosa(), Set.of("Medium", "Jumbo"));
 	}
 
 	@Override
@@ -61,11 +59,21 @@ public class SecondPizzeriaService implements PizzeriaService {
 		return "Pizzeria: " + getName() + "\nAddress: " + getAddress();
 	}
 
+	@Override
+	public PizzeriaMenu getMenu() {
+		return this.menu;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	@Override
+	public String toString() {
+		return this.getName();
 	}
 }

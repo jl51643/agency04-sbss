@@ -1,5 +1,6 @@
 package com.agency04.sbss.pizza.model;
 
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -28,5 +29,23 @@ public class Margherita implements Pizza {
     @Override
     public Set<PizzaIngredient> getIngredients() {
         return this.ingredients;
+    }
+
+    @Override
+    public String toString() {
+        return this.getName();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Margherita that = (Margherita) o;
+        return getName().equals(that.getName()) && getIngredients().equals(that.getIngredients());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getIngredients());
     }
 }
