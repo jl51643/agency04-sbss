@@ -1,9 +1,9 @@
 package com.agency04.sbss.pizza.service.impl;
 
-import com.agency04.sbss.pizza.model.Capriccosa;
-import com.agency04.sbss.pizza.model.Margherita;
-import com.agency04.sbss.pizza.model.Marinara;
-import com.agency04.sbss.pizza.model.Pizza;
+import com.agency04.sbss.pizza.model.*;
+import com.agency04.sbss.pizza.model.pizzaModels.Capriccosa;
+import com.agency04.sbss.pizza.model.pizzaModels.Margherita;
+import com.agency04.sbss.pizza.model.pizzaModels.Marinara;
 import com.agency04.sbss.pizza.rest.dto.response.PizzeriaMenu;
 import com.agency04.sbss.pizza.service.PizzeriaService;
 import org.springframework.context.annotation.Primary;
@@ -44,9 +44,9 @@ public class FirstPizzeriaService implements PizzeriaService {
 		this.setAddress("Sesame street");
 
 		this.menu = new PizzeriaMenu();
-		this.menu.addMenuItem(new Margherita(), Set.of("Small", "Medium", "Large", "Jumbo"));
-		this.menu.addMenuItem(new Capriccosa(), Set.of("Small", "Medium", "Jumbo"));
-		this.menu.addMenuItem(new Marinara(), Set.of("Small"));
+		this.menu.addMenuItem(new Margherita(), Set.of(Size.SMALL, Size.MEDIUM, Size.LARGE));
+		this.menu.addMenuItem(new Capriccosa(), Set.of(Size.SMALL, Size.MEDIUM, Size.LARGE));
+		this.menu.addMenuItem(new Marinara(), Set.of(Size.SMALL, Size.MEDIUM, Size.LARGE));
 	}
 
 	@Override

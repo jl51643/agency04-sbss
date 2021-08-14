@@ -1,6 +1,7 @@
 package com.agency04.sbss.pizza.rest.dto.response;
 
 import com.agency04.sbss.pizza.model.Pizza;
+import com.agency04.sbss.pizza.model.Size;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,9 +16,9 @@ public class PizzeriaMenu {
 	/**
 	 * Pizzeria menu
 	 */
-	private Map<Pizza, Set<String>> menu;
+	private Map<Pizza, Set<Size>> menu;
 
-	public PizzeriaMenu(Map<Pizza, Set<String>> menu) {
+	public PizzeriaMenu(Map<Pizza, Set<Size>> menu) {
 		this.menu = menu;
 	}
 
@@ -30,7 +31,7 @@ public class PizzeriaMenu {
 	 *
 	 * @return Returns pizzeria menu
 	 */
-	public Map<Pizza, Set<String>> getMenu() {
+	public Map<Pizza, Set<Size>> getMenu() {
 		return menu;
 	}
 
@@ -39,7 +40,7 @@ public class PizzeriaMenu {
 	 *
 	 * @param menu New pizzeria menu
 	 */
-	public void setMenu(Map<Pizza, Set<String>> menu) {
+	public void setMenu(Map<Pizza, Set<Size>> menu) {
 		this.menu = menu;
 	}
 
@@ -49,7 +50,7 @@ public class PizzeriaMenu {
 	 * @param pizza Pizza to add to menu
 	 * @param sizes available pizza sizes
 	 */
-	public void addMenuItem(Pizza pizza, Set<String> sizes) {
+	public void addMenuItem(Pizza pizza, Set<Size> sizes) {
 		this.menu.put(pizza, sizes);
 	}
 }

@@ -1,47 +1,57 @@
 package com.agency04.sbss.pizza.model;
 
+import javax.persistence.*;
+import java.util.Objects;
+
 /**
- * Ingredients that pizza can have
- * {@link #TOMATO_SAUCE}
- * {@link #MOZZARELLA}
- * {@link #OREGANO}
- * {@link #GARLIC}
- * {@link #BASIL}
- * {@link #HAM}
- * {@link #ARTICHOKES}
- * {@link #MUSHROOMS}
- * {@link #OLIVES}
+ * Wrapper object for pizza ingredients
  */
-public enum PizzaIngredient {
+@Entity
+public class PizzaIngredient {
 
-    TOMATO_SAUCE("tomato sauce"),
-    MOZZARELLA("mozzarella"),
-    OREGANO("oregano"),
-    GARLIC("garlic"),
-    BASIL("basil"),
-    HAM("ham"),
-    ARTICHOKES("artichokes"),
-    MUSHROOMS("mushrooms"),
-    OLIVES("olives");
+	/**
+	 * Ingredient name
+	 */
+	@Id
+	private String ingredientName;
 
-    /**
-     * Name of ingredient
-     */
-    private final String pizzaIngredient;
+	/**
+	 * Enum value for pizza ingredient
+	 */
+	@Enumerated(EnumType.STRING)
+	private EPizzaIngredient pizzaIngredient;
 
-    /**
-     * Constructs pizza ingredient with given name
-     *
-     * @param name name of ingredient
-     */
-    PizzaIngredient(String name) {
-        this.pizzaIngredient = name;
-    }
+	public PizzaIngredient(EPizzaIngredient pizzaIngredient) {
+		this.pizzaIngredient = pizzaIngredient;
+		this.ingredientName = this.pizzaIngredient.name();
+	}
 
-    /**
-     * @return Returns name of ingredient
-     */
-    public String getPizzaIngredient() {
-        return pizzaIngredient;
-    }
+	public PizzaIngredient() {
+
+	}
+
+	public EPizzaIngredient getPizzaIngredient() {
+		return pizzaIngredient;
+	}
+
+	public void setPizzaIngredient(EPizzaIngredient pizzaIngredient) {
+		this.pizzaIngredient = pizzaIngredient;
+	}
+
+	public String getIngredientName() {
+		return ingredientName;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		PizzaIngredient that = (PizzaIngredient) o;
+		return getPizzaIngredient() == that.getPizzaIngredient();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getPizzaIngredient());
+	}
 }

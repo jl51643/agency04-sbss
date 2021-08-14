@@ -1,4 +1,7 @@
-package com.agency04.sbss.pizza.model;
+package com.agency04.sbss.pizza.model.pizzaModels;
+
+import com.agency04.sbss.pizza.model.EPizzaIngredient;
+import com.agency04.sbss.pizza.model.Pizza;
 
 import java.util.Objects;
 import java.util.Set;
@@ -6,23 +9,20 @@ import java.util.Set;
 /**
  * Model of pizza representing concrete pizza
  */
-public class Capriccosa implements Pizza {
+public class Marinara extends Pizza {
 
 	/**
 	 * Pizza name
 	 */
-	private final String name = "Capriccosa";
+	private final String name = "Marinara";
 
 	/**
 	 * Set of ingredients that this pizza contains
 	 */
-	private final Set<PizzaIngredient> ingredients =
-			Set.of(PizzaIngredient.TOMATO_SAUCE,
-					PizzaIngredient.MOZZARELLA,
-					PizzaIngredient.HAM,
-					PizzaIngredient.ARTICHOKES,
-					PizzaIngredient.MUSHROOMS,
-					PizzaIngredient.OLIVES);
+	private final Set<EPizzaIngredient> ingredients =
+			Set.of(EPizzaIngredient.TOMATO_SAUCE,
+					EPizzaIngredient.GARLIC,
+					EPizzaIngredient.BASIL);
 
 	@Override
 	public String getName() {
@@ -30,7 +30,7 @@ public class Capriccosa implements Pizza {
 	}
 
 	@Override
-	public Set<PizzaIngredient> getIngredients() {
+	public Set<EPizzaIngredient> getIngredients() {
 		return this.ingredients;
 	}
 
@@ -43,8 +43,8 @@ public class Capriccosa implements Pizza {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Capriccosa that = (Capriccosa) o;
-		return getName().equals(that.getName()) && getIngredients().equals(that.getIngredients());
+		Marinara marinara = (Marinara) o;
+		return getName().equals(marinara.getName()) && getIngredients().equals(marinara.getIngredients());
 	}
 
 	@Override

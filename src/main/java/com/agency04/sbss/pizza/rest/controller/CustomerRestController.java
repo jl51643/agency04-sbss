@@ -1,6 +1,8 @@
 package com.agency04.sbss.pizza.rest.controller;
 
 import com.agency04.sbss.pizza.model.Customer;
+import com.agency04.sbss.pizza.rest.dto.request.CustomerInfoRequest;
+import com.agency04.sbss.pizza.rest.dto.response.CustomerInfoResponse;
 import com.agency04.sbss.pizza.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +31,8 @@ public class CustomerRestController {
 	 * @return returns customer info if customer with given username exists
 	 */
 	@GetMapping("/{username}")
-	public ResponseEntity<Customer> getCustomerInfo(@PathVariable String username) {
+	public ResponseEntity<CustomerInfoResponse> getCustomerInfo(@PathVariable String username) {
+
 		if (customerService.customerExists(username))
 			return new ResponseEntity<>(
 					customerService.getCustomerInfo(username),
@@ -48,8 +51,10 @@ public class CustomerRestController {
 		if (customerService.customerExists(customer.getUsername()))
 			return new ResponseEntity<>("Username already in use.", HttpStatus.BAD_REQUEST);
 
-		if (customerService.registerCustomer(customer))
-			return new ResponseEntity<>(HttpStatus.CREATED);
+		CustomerInfoResponse createdCustomer = customerService.registerCustomer(customer);
+
+		if (createdCustomer != null)
+			return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
 		else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
@@ -60,13 +65,11 @@ public class CustomerRestController {
 	 * @return returns HTTP OK status if data is successfully updated
 	 */
 	@PutMapping("")
-	public ResponseEntity<?> updateCustomer(@RequestBody Customer customer) {
+	public ResponseEntity<?> updateCustomer(@RequestBody CustomerInfoRequest customer) {
 		if (!customerService.customerExists(customer.getUsername()))
 			return new ResponseEntity<>("No Such customer with username: " + customer.getUsername(), HttpStatus.NOT_FOUND);
 
-		if (customerService.updateCustomer(customer))
-			return new ResponseEntity<>("Customer data updated.", HttpStatus.OK);
-		else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(customerService.updateCustomer(customer), HttpStatus.OK);
 	}
 
 	/**
@@ -80,8 +83,8 @@ public class CustomerRestController {
 		if (!customerService.customerExists(username))
 			return new ResponseEntity<>("No Such customer with username: " + username, HttpStatus.NOT_FOUND);
 
-		if (customerService.deleteCustomer(username))
-			return new ResponseEntity<>("Customer deleted.", HttpStatus.OK);
-		else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		customerService.deleteCustomer(username);
+
+		return new ResponseEntity<>("Customer deleted.", HttpStatus.OK);
 	}
 }

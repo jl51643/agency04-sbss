@@ -1,6 +1,8 @@
 package com.agency04.sbss.pizza.service;
 
 import com.agency04.sbss.pizza.model.Customer;
+import com.agency04.sbss.pizza.rest.dto.request.CustomerInfoRequest;
+import com.agency04.sbss.pizza.rest.dto.response.CustomerInfoResponse;
 
 /**
  * Model of customer service
@@ -13,7 +15,7 @@ public interface CustomerService {
 	 * @param username username of customer to look for
 	 * @return returns customer info from database for given username
 	 */
-	Customer getCustomerInfo(String username);
+	CustomerInfoResponse getCustomerInfo(String username);
 
 	/**
 	 * Returns true if customer with given username exists in database
@@ -29,7 +31,7 @@ public interface CustomerService {
 	 * @param customer new customer
 	 * @return returns true if customer is successfully registered to database
 	 */
-	boolean registerCustomer(Customer customer);
+	CustomerInfoResponse registerCustomer(Customer customer);
 
 	/**
 	 * Updates customer's info.
@@ -39,13 +41,12 @@ public interface CustomerService {
 	 * @param customer customer info to update
 	 * @return returns true if customer data is successfully updated
 	 */
-	boolean updateCustomer(Customer customer);
+	CustomerInfoResponse updateCustomer(CustomerInfoRequest customer);
 
 	/**
 	 * Deletes customer from database
 	 *
 	 * @param username username of customer to delete
-	 * @return returns true if user is successfully deleted
 	 */
-	boolean deleteCustomer(String username);
+	void deleteCustomer(String username);
 }
