@@ -23,7 +23,7 @@ public class PizzaFactory {
 	public static Pizza newInstance(String pizzaName) throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException {
 
 		Class<Pizza> clazz;
-		clazz = (Class<Pizza>) Class.forName("com.agency04.sbss.pizza.model." + pizzaName);
+		clazz = (Class<Pizza>) Class.forName("com.agency04.sbss.pizza.model.pizzaModels." + pizzaName);
 
 		return clazz.getConstructor().newInstance();
 	}

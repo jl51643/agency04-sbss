@@ -1,9 +1,7 @@
 package com.agency04.sbss.pizza.rest.dto.request;
 
-import com.agency04.sbss.pizza.model.Customer;
-import com.agency04.sbss.pizza.model.PizzaOrder;
-
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Model of order form for delivery
@@ -11,33 +9,46 @@ import java.util.List;
 public class DeliveryOrderForm {
 
 	/**
-	 * Customer
+	 * Customer username
 	 */
-	private Customer customer;
+	private String customerUsername;
 
 	/**
 	 * List of pizzas customer ordered
 	 */
-	private List<PizzaOrder> pizzaOrders;
+	private List<PizzaOrderForm> pizzaOrders;
 
-	public DeliveryOrderForm(Customer customer, List<PizzaOrder> pizzaOrders) {
-		this.customer = customer;
+	public DeliveryOrderForm(String customerUsername, List<PizzaOrderForm> pizzaOrders) {
+		this.customerUsername = customerUsername;
 		this.pizzaOrders = pizzaOrders;
 	}
 
-	public Customer getCustomer() {
-		return customer;
+	public String getCustomerUsername() {
+		return customerUsername;
 	}
 
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
+	public void setCustomerUsername(String customerUsername) {
+		this.customerUsername = customerUsername;
 	}
 
-	public List<PizzaOrder> getPizzaOrders() {
+	public List<PizzaOrderForm> getPizzaOrders() {
 		return pizzaOrders;
 	}
 
-	public void setPizzaOrders(List<PizzaOrder> pizzaOrders) {
+	public void setPizzaOrders(List<PizzaOrderForm> pizzaOrders) {
 		this.pizzaOrders = pizzaOrders;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		DeliveryOrderForm that = (DeliveryOrderForm) o;
+		return getCustomerUsername().equals(that.getCustomerUsername()) && getPizzaOrders().equals(that.getPizzaOrders());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getCustomerUsername(), getPizzaOrders());
 	}
 }

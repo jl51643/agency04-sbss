@@ -1,22 +1,23 @@
 package com.agency04.sbss.pizza.service.impl;
 
+import com.agency04.sbss.pizza.dao.DeliveryRepository;
 import com.agency04.sbss.pizza.model.Customer;
-import com.agency04.sbss.pizza.model.Pizza;
-import com.agency04.sbss.pizza.model.PizzaIngredient;
+import com.agency04.sbss.pizza.model.Delivery;
 import com.agency04.sbss.pizza.model.PizzaOrder;
 import com.agency04.sbss.pizza.rest.dto.request.DeliveryOrderForm;
+import com.agency04.sbss.pizza.rest.dto.response.DeliveryOrderInfoResponse;
+import com.agency04.sbss.pizza.rest.dto.response.DeliveryPizzaOrderDetails;
 import com.agency04.sbss.pizza.rest.dto.response.PizzeriaInfo;
 import com.agency04.sbss.pizza.rest.dto.response.PizzeriaMenu;
 import com.agency04.sbss.pizza.rest.exceptionHandler.NoSuchPizzaException;
 import com.agency04.sbss.pizza.service.PizzaDeliveryService;
 import com.agency04.sbss.pizza.service.PizzeriaService;
-import com.agency04.sbss.pizza.service.impl.util.factory.PizzaFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Concrete pizza delivery service
@@ -29,53 +30,34 @@ public class PizzaDeliveryServiceImpl implements PizzaDeliveryService {
 	 */
 	private final PizzeriaService pizzeriaService;
 
+	/**
+	 * Object conversion service
+	 */
 	private final ConversionService conversionService;
 
 	/**
-	 * Current orders
+	 * Service used for operations with <code>Delivery</code> objects
 	 */
-	private List<PizzaOrder> currentOrders;
+	private final DeliveryRepository deliveryRepository;
 
-	public PizzaDeliveryServiceImpl(PizzeriaService pizzeriaService, ConversionService conversionService) {
+	public PizzaDeliveryServiceImpl(PizzeriaService pizzeriaService, ConversionService conversionService, DeliveryRepository deliveryRepository) {
 		this.pizzeriaService = pizzeriaService;
 		this.conversionService = conversionService;
+		this.deliveryRepository = deliveryRepository;
 	}
 
 	@Override
-	public String orderPizza(DeliveryOrderForm order) {
-
+	public DeliveryOrderInfoResponse orderPizza(DeliveryOrderForm order) {
 		Customer customer = conversionService.convert(order, Customer.class);
-
-		String orders = pizzeriaService.getName() + " Pizzeria: \nYou ordered: \n";
 
 		List<PizzaOrder> pizzaOrderList = conversionService.convert(order, List.class);
 
+		DeliveryOrderInfoResponse orders = checkOrder(pizzaOrderList);
 
-		for (PizzaOrder pizzaOrder : pizzaOrderList) {
-			Pizza pizza;
-			try {
-				pizza = PizzaFactory.newInstance(pizzaOrder.getPizzaName());
-			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException e) {
-				throw new NoSuchPizzaException("There is no " + pizzaOrder.getPizzaName() + " pizza.");
-			}
+		Delivery delivery = new Delivery(customer, new Date());
+		delivery.setPizzaOrders(pizzaOrderList);
 
-			if (!this.pizzeriaService.getMenu().getMenu().containsKey(pizza))
-				throw new NoSuchPizzaException("Pizzeria do not serve " + pizza.getName() + " pizza.");
-
-			if (!this.pizzeriaService.getMenu().getMenu().get(pizza).contains(pizzaOrder.getSize()))
-				throw new NoSuchPizzaException("Pizzeria do not serve " + pizza.getName() + " pizza size " + pizzaOrder.getSize() + ".");
-
-			orders += pizzaOrder.getQuantity() + " " +pizzaOrder.getSize() + " "
-					+ pizza.getName() + " pizza with ingredients "
-					+ pizza.getIngredients()
-					.stream()
-					.map(PizzaIngredient::getPizzaIngredient)
-					.collect(Collectors
-							.joining(", "))
-					+ ".\n";
-		}
-
-		this.setCurrentOrders(order.getPizzaOrders());
+		deliveryRepository.save(delivery);
 
 		return orders;
 	}
@@ -94,10 +76,37 @@ public class PizzaDeliveryServiceImpl implements PizzaDeliveryService {
 
 	@Override
 	public List<PizzaOrder> getCurrentOrders() {
-		return this.currentOrders;
+		List<Delivery> deliveries = deliveryRepository.findTop10ByOrderBySubmissionDateDesc();
+		List<PizzaOrder> pizzaOrders = new LinkedList<>();
+		for (Delivery delivery : deliveries) {
+			pizzaOrders.addAll(delivery.getPizzaOrders());
+		}
+
+		return pizzaOrders;
 	}
 
-	public void setCurrentOrders(List<PizzaOrder> currentOrders) {
-		this.currentOrders = currentOrders;
+	private DeliveryOrderInfoResponse checkOrder(List<PizzaOrder> pizzaOrderList) {
+
+		DeliveryOrderInfoResponse deliveryOrderInfoResponse = new DeliveryOrderInfoResponse();
+		deliveryOrderInfoResponse.setPizzeriaName(pizzeriaService.getName());
+
+		for (PizzaOrder pizzaOrder : pizzaOrderList) {
+			if (!this.pizzeriaService.getMenu().getMenu().containsKey(pizzaOrder.getPizza()))
+				throw new NoSuchPizzaException("Pizzeria do not serve " + pizzaOrder.getPizza().getName() + " pizza.");
+
+			if (!this.pizzeriaService.getMenu().getMenu().get(pizzaOrder.getPizza()).contains(pizzaOrder.getSize()))
+				throw new NoSuchPizzaException("Pizzeria do not serve " + pizzaOrder.getPizza().getName() + " pizza size " + pizzaOrder.getSize() + ".");
+
+			DeliveryPizzaOrderDetails deliveryPizzaOrderDetails =
+					new DeliveryPizzaOrderDetails(
+							pizzaOrder.getPizza(),
+							pizzaOrder.getSize(),
+							pizzaOrder.getQuantity()
+					);
+
+			deliveryOrderInfoResponse.getDeliveryPizzaOrderDetails().add(deliveryPizzaOrderDetails);
+		}
+
+		return deliveryOrderInfoResponse;
 	}
 }

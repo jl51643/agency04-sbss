@@ -1,8 +1,9 @@
 package com.agency04.sbss.pizza.service.impl;
 
-import com.agency04.sbss.pizza.model.Capriccosa;
-import com.agency04.sbss.pizza.model.Margherita;
+import com.agency04.sbss.pizza.model.pizzaModels.Capriccosa;
+import com.agency04.sbss.pizza.model.pizzaModels.Margherita;
 import com.agency04.sbss.pizza.model.Pizza;
+import com.agency04.sbss.pizza.model.EPizzaSize;
 import com.agency04.sbss.pizza.rest.dto.response.PizzeriaMenu;
 import com.agency04.sbss.pizza.service.PizzeriaService;
 import org.springframework.stereotype.Service;
@@ -40,8 +41,8 @@ public class SecondPizzeriaService implements PizzeriaService {
 		this.setAddress("Wall street");
 
 		this.menu = new PizzeriaMenu();
-		this.menu.addMenuItem(new Margherita(), Set.of("Small", "Large", "Jumbo"));
-		this.menu.addMenuItem(new Capriccosa(), Set.of("Medium", "Jumbo"));
+		this.menu.addMenuItem(new Margherita(), Set.of(EPizzaSize.SMALL, EPizzaSize.MEDIUM, EPizzaSize.LARGE));
+		this.menu.addMenuItem(new Capriccosa(), Set.of(EPizzaSize.SMALL, EPizzaSize.MEDIUM, EPizzaSize.LARGE));
 	}
 
 	@Override

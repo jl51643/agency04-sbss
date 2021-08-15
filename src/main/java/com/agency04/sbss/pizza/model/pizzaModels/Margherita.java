@@ -1,4 +1,7 @@
-package com.agency04.sbss.pizza.model;
+package com.agency04.sbss.pizza.model.pizzaModels;
+
+import com.agency04.sbss.pizza.model.EPizzaIngredient;
+import com.agency04.sbss.pizza.model.Pizza;
 
 import java.util.Objects;
 import java.util.Set;
@@ -6,7 +9,7 @@ import java.util.Set;
 /**
  * Model of pizza representing concrete pizza
  */
-public class Margherita implements Pizza {
+public class Margherita extends Pizza {
 
     /**
      * Pizza name
@@ -16,10 +19,10 @@ public class Margherita implements Pizza {
     /**
      * Set of ingredients that this pizza contains
      */
-    private final Set<PizzaIngredient> ingredients =
-            Set.of(PizzaIngredient.TOMATO_SAUCE,
-                    PizzaIngredient.MOZZARELLA,
-                    PizzaIngredient.OREGANO);
+    private final Set<EPizzaIngredient> ingredients =
+            Set.of(EPizzaIngredient.TOMATO_SAUCE,
+                    EPizzaIngredient.MOZZARELLA,
+                    EPizzaIngredient.OREGANO);
 
     @Override
     public String getName() {
@@ -27,7 +30,7 @@ public class Margherita implements Pizza {
     }
 
     @Override
-    public Set<PizzaIngredient> getIngredients() {
+    public Set<EPizzaIngredient> getIngredients() {
         return this.ingredients;
     }
 

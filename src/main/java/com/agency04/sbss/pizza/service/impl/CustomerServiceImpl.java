@@ -1,10 +1,15 @@
 package com.agency04.sbss.pizza.service.impl;
 
-import com.agency04.sbss.pizza.dao.CustomerDatabaseHandler;
+import com.agency04.sbss.pizza.dao.CustomerRepository;
+import com.agency04.sbss.pizza.dao.DeliveryRepository;
 import com.agency04.sbss.pizza.model.Customer;
+import com.agency04.sbss.pizza.rest.dto.request.CustomerInfoRequest;
+import com.agency04.sbss.pizza.rest.dto.response.CustomerInfoResponse;
 import com.agency04.sbss.pizza.service.CustomerService;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.NoSuchElementException;
 
 /**
@@ -14,12 +19,24 @@ import java.util.NoSuchElementException;
 public class CustomerServiceImpl implements CustomerService {
 
 	/**
-	 * Database handler for operations with database
+	 * Service for operations with customers data
 	 */
-	private final CustomerDatabaseHandler databaseHandler;
+	private final CustomerRepository customerRepository;
 
-	public CustomerServiceImpl(CustomerDatabaseHandler databaseHandler) {
-		this.databaseHandler = databaseHandler;
+	/**
+	 * Service for operations with <code>Delivery</code> objects
+	 */
+	private final DeliveryRepository deliveryRepository;
+
+	/**
+	 * Service for type conversion
+	 */
+	private final ConversionService conversionService;
+
+	public CustomerServiceImpl(CustomerRepository customerRepository, DeliveryRepository deliveryRepository, ConversionService conversionService) {
+		this.customerRepository = customerRepository;
+		this.deliveryRepository = deliveryRepository;
+		this.conversionService = conversionService;
 	}
 
 	/**
@@ -29,14 +46,19 @@ public class CustomerServiceImpl implements CustomerService {
 	 * @return returns customer info from database for given username
 	 */
 	@Override
-	public Customer getCustomerInfo(String username) {
+	public CustomerInfoResponse getCustomerInfo(String username) {
 
 		if (username == null)
 			throw new NullPointerException("Username can not be null.");
 
-		if (databaseHandler.existsByUsername(username))
-			return databaseHandler.getCustomerByUsername(username);
-		throw new NoSuchElementException("There is no user with username: " + username + ".");
+		Customer customer;
+
+		if (customerRepository.existsById(username))
+			customer = customerRepository.findById(username).get();
+		else
+			throw new NoSuchElementException("There is no user with username: " + username + ".");
+
+		return conversionService.convert(customer, CustomerInfoResponse.class);
 	}
 
 	/**
@@ -51,7 +73,12 @@ public class CustomerServiceImpl implements CustomerService {
 		if (username == null)
 			return false;
 
-		return databaseHandler.existsByUsername(username);
+		try {
+			return customerRepository.existsById(username);
+		} catch (IllegalArgumentException exc) {
+			return false;
+		}
+
 	}
 
 	/**
@@ -61,18 +88,20 @@ public class CustomerServiceImpl implements CustomerService {
 	 * @return returns true if customer is successfully registered to database
 	 */
 	@Override
-	public boolean registerCustomer(Customer customer) {
+	public CustomerInfoResponse registerCustomer(Customer customer) {
 
 		if (customer == null
 				|| customer.getUsername() == null
-				|| customer.getAddress() == null
-				|| customer.getPhone() == null)
-			return false;
+				|| customer.getCustomerDetails() == null
+				|| customer.getDeliveries() == null)
+			return null;
 
 		if (customerExists(customer.getUsername()))
-			return false;
+			return null;
 
-		return databaseHandler.registerCustomer(customer);
+		Customer savedCustomer = customerRepository.save(customer);
+
+		return conversionService.convert(savedCustomer, CustomerInfoResponse.class);
 	}
 
 	/**
@@ -80,38 +109,53 @@ public class CustomerServiceImpl implements CustomerService {
 	 * If new value of some customer data is set to <code>null</code>
 	 * old value stays written to database
 	 *
-	 * @param customer customer info to update
+	 * @param customerInfo customer info to update
 	 * @return returns true if customer data is successfully updated
 	 */
+	@Transactional
 	@Override
-	public boolean updateCustomer(Customer customer) {
+	public CustomerInfoResponse updateCustomer(CustomerInfoRequest customerInfo) {
 
-		if (customer == null || customer.getUsername() == null)
-			return false;
+		if (customerInfo == null || customerInfo.getUsername() == null)
+			return null;
 
-		Customer oldCustomer = databaseHandler.getCustomerByUsername(customer.getUsername());
+		if (!customerRepository.existsById(customerInfo.getUsername()))
+			return null;
 
-		if (customer.getAddress() == null)
-			customer.setAddress(oldCustomer.getAddress());
+		Customer oldCustomer = customerRepository.findById(customerInfo.getUsername()).get();
 
-		if (customer.getPhone() == null)
-			customer.setPhone(oldCustomer.getPhone());
+		Customer customer = new Customer(oldCustomer.getUsername(), oldCustomer.getCustomerDetails(), oldCustomer.getDeliveries());
 
-		return databaseHandler.updateCustomer(customer);
+		if (customerInfo.getFirstname() != null)
+			customer.getCustomerDetails().setFirstName(customerInfo.getFirstname());
+
+		if (customerInfo.getLastname() != null)
+			customer.getCustomerDetails().setLastName(customerInfo.getLastname());
+
+
+		customerRepository.updateCustomerDetails(customer.getCustomerDetails(), customerInfo.getUsername());
+
+
+		Customer savedCustomer = customerRepository.findById(customerInfo.getUsername()).get();
+
+		return conversionService.convert(savedCustomer, CustomerInfoResponse.class);
 	}
 
 	/**
 	 * Deletes customer from database
 	 *
 	 * @param username username of customer to delete
-	 * @return returns true if user is successfully deleted
 	 */
+	@Transactional
 	@Override
-	public boolean deleteCustomer(String username) {
+	public void deleteCustomer(String username) {
 
 		if (username == null)
-			return false;
+			return;
 
-		return databaseHandler.deleteCustomer(username);
+		deliveryRepository.detachCustomerFromDelivery(username);
+
+		customerRepository.deleteById(username);
 	}
+
 }
