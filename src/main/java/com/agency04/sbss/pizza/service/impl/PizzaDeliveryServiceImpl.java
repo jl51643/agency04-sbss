@@ -16,6 +16,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -75,12 +76,13 @@ public class PizzaDeliveryServiceImpl implements PizzaDeliveryService {
 
 	@Override
 	public List<PizzaOrder> getCurrentOrders() {
-		Delivery delivery = deliveryRepository.getTopByOrderBySubmissionDateDesc();
+		List<Delivery> deliveries = deliveryRepository.findTop10ByOrderBySubmissionDateDesc();
+		List<PizzaOrder> pizzaOrders = new LinkedList<>();
+		for (Delivery delivery : deliveries) {
+			pizzaOrders.addAll(delivery.getPizzaOrders());
+		}
 
-		if (delivery != null) {
-			return delivery.getPizzaOrders();
-		} else
-			throw new NullPointerException("No deliveries ordered yet.");
+		return pizzaOrders;
 	}
 
 	private DeliveryOrderInfoResponse checkOrder(List<PizzaOrder> pizzaOrderList) {

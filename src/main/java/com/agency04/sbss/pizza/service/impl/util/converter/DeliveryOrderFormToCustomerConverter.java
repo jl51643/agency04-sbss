@@ -7,6 +7,8 @@ import com.agency04.sbss.pizza.rest.exceptionHandler.NoSuchCustomerException;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * Converts <code>DeliveryOrderForm</code> to <code>Customer</code>
  */
@@ -25,8 +27,10 @@ public class DeliveryOrderFormToCustomerConverter implements Converter<DeliveryO
 		if (deliveryOrderForm.getCustomerUsername() == null)
 			throw new NullPointerException("Customer personal data missing.");
 
-		if (customerRepository.findById(deliveryOrderForm.getCustomerUsername()).isPresent()) {
-			return customerRepository.findById(deliveryOrderForm.getCustomerUsername()).get();
+		Optional<Customer> customer = customerRepository.findById(deliveryOrderForm.getCustomerUsername());
+
+		if (customer.isPresent()) {
+			return customer.get();
 		} else {
 			throw new NoSuchCustomerException("There is no customer with username " + deliveryOrderForm.getCustomerUsername() + ".");
 		}
