@@ -27,15 +27,15 @@ public class PizzaOrder {
 	 * Size of Pizza
 	 */
 	@Enumerated(EnumType.STRING)
-	private Size size;
+	private EPizzaSize EPizzaSize;
 
 	/**
 	 * Number of ordered pizzas
 	 */
 	private String quantity;
 
-	public PizzaOrder(Size size, String quantity) {
-		this.size = size;
+	public PizzaOrder(EPizzaSize EPizzaSize, String quantity) {
+		this.EPizzaSize = EPizzaSize;
 		this.quantity = quantity;
 	}
 
@@ -58,12 +58,12 @@ public class PizzaOrder {
 		this.pizza = pizza;
 	}
 
-	public Size getSize() {
-		return size;
+	public EPizzaSize getSize() {
+		return EPizzaSize;
 	}
 
-	public void setSize(Size size) {
-		this.size = size;
+	public void setSize(EPizzaSize EPizzaSize) {
+		this.EPizzaSize = EPizzaSize;
 	}
 
 	public String getQuantity() {

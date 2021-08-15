@@ -2,7 +2,7 @@ package com.agency04.sbss.pizza.service.impl.util.converter;
 
 import com.agency04.sbss.pizza.model.Pizza;
 import com.agency04.sbss.pizza.model.PizzaOrder;
-import com.agency04.sbss.pizza.model.Size;
+import com.agency04.sbss.pizza.model.EPizzaSize;
 import com.agency04.sbss.pizza.rest.dto.request.DeliveryOrderForm;
 import com.agency04.sbss.pizza.rest.dto.request.PizzaOrderForm;
 import com.agency04.sbss.pizza.rest.exceptionHandler.NoSuchPizzaException;
@@ -56,16 +56,17 @@ public class DeliveryOrderFormToPizzaOrderListConverter implements Converter<Del
 
 				pizzaService.insertPizza(pizza);
 
-				Size size = null;
-				for (Size s : Size.class.getEnumConstants()) {
+				EPizzaSize EPizzaSize = null;
+				for (EPizzaSize s : EPizzaSize.class.getEnumConstants()) {
 					if (pizzaOrderForm.getSize().equals(s.getSize())) {
-						size = s;
+						EPizzaSize = s;
 					}
 				}
-				if (size == null)
+				if (EPizzaSize == null) {
 					throw new NoSuchPizzaException("There is no " + pizzaOrderForm.getSize() + " size of pizza.");
+				}
 
-				PizzaOrder pizzaOrder = new PizzaOrder(size, pizzaOrderForm.getQuantity());
+				PizzaOrder pizzaOrder = new PizzaOrder(EPizzaSize, pizzaOrderForm.getQuantity());
 				pizzaOrder.setPizza(pizza);
 				pizzaOrderList.add(pizzaOrder);
 

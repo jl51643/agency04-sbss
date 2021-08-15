@@ -14,4 +14,6 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
 	@Query(value = "UPDATE Delivery SET Delivery.username = null WHERE Delivery.username = :username", nativeQuery = true)
 	void detachCustomerFromDelivery(@Param("username") String username);
 
+	Delivery getTopByOrderBySubmissionDateDesc();
+
 }

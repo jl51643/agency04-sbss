@@ -44,9 +44,9 @@ public class FirstPizzeriaService implements PizzeriaService {
 		this.setAddress("Sesame street");
 
 		this.menu = new PizzeriaMenu();
-		this.menu.addMenuItem(new Margherita(), Set.of(Size.SMALL, Size.MEDIUM, Size.LARGE));
-		this.menu.addMenuItem(new Capriccosa(), Set.of(Size.SMALL, Size.MEDIUM, Size.LARGE));
-		this.menu.addMenuItem(new Marinara(), Set.of(Size.SMALL, Size.MEDIUM, Size.LARGE));
+		this.menu.addMenuItem(new Margherita(), Set.of(EPizzaSize.SMALL, EPizzaSize.MEDIUM, EPizzaSize.LARGE));
+		this.menu.addMenuItem(new Capriccosa(), Set.of(EPizzaSize.SMALL, EPizzaSize.MEDIUM, EPizzaSize.LARGE));
+		this.menu.addMenuItem(new Marinara(), Set.of(EPizzaSize.SMALL, EPizzaSize.MEDIUM, EPizzaSize.LARGE));
 	}
 
 	@Override

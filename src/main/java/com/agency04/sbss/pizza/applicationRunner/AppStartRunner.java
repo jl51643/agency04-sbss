@@ -1,4 +1,4 @@
-package com.agency04.sbss.pizza;
+package com.agency04.sbss.pizza.applicationRunner;
 
 import com.agency04.sbss.pizza.model.Customer;
 import com.agency04.sbss.pizza.model.CustomerDetails;

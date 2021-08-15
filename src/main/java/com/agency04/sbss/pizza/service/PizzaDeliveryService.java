@@ -2,6 +2,7 @@ package com.agency04.sbss.pizza.service;
 
 import com.agency04.sbss.pizza.model.PizzaOrder;
 import com.agency04.sbss.pizza.rest.dto.request.DeliveryOrderForm;
+import com.agency04.sbss.pizza.rest.dto.response.DeliveryOrderInfoResponse;
 import com.agency04.sbss.pizza.rest.dto.response.PizzeriaInfo;
 import com.agency04.sbss.pizza.rest.dto.response.PizzeriaMenu;
 
@@ -18,7 +19,7 @@ public interface PizzaDeliveryService {
 	 * @param order customer's order
 	 * @return Returns description of order
 	 */
-	String orderPizza(DeliveryOrderForm order);
+	DeliveryOrderInfoResponse orderPizza(DeliveryOrderForm order);
 
 	/**
 	 * Returns information about pizzeria

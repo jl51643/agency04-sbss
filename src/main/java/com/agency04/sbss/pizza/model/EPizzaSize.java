@@ -6,14 +6,14 @@ package com.agency04.sbss.pizza.model;
  *  {@link #MEDIUM}
  *  {@link #LARGE}
  */
-public enum Size {
+public enum EPizzaSize {
 	SMALL("Small"),
 	MEDIUM("Medium"),
 	LARGE("Large");
 
 	private final String size;
 
-	Size(String size) {
+	EPizzaSize(String size) {
 		this.size = size;
 	}
 
